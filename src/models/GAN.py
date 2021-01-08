@@ -4,9 +4,9 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 
 
-class Generator(nn.Module):
-    def __init__(self, noise_size, out_size, hidden_size, num_layers=1):
-        super(Generator, self).__init__()
+class GAN_Generator(nn.Module):
+    def __init__(self, noise_size, out_size, hidden_size, num_layers=1, factor=1):
+        super(GAN_Generator, self).__init__()
 
         assert num_layers >= 1
 
@@ -17,7 +17,6 @@ class Generator(nn.Module):
 
         self.generator = []
 
-        factor = 1
         for index in range(self.num_layers):
             if index == 0:
                 self.generator.append(
@@ -46,9 +45,9 @@ class Generator(nn.Module):
         )
         return block
 
-class Discriminator(nn.Module):
-    def __init__(self, in_size, hidden_size, num_layers=1):
-        super(Discriminator, self).__init__()
+class GAN_Discriminator(nn.Module):
+    def __init__(self, in_size, hidden_size, num_layers=1, factor=1):
+        super(GAN_Discriminator, self).__init__()
 
         assert num_layers >= 1
 
@@ -58,7 +57,6 @@ class Discriminator(nn.Module):
 
         self.discriminator = []
 
-        factor = 1
         for index in range(self.num_layers):
             if index == 0:
                 self.discriminator.append(
