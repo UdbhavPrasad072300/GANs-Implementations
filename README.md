@@ -1,6 +1,6 @@
 # GANs-Implementations
 
-GANs Implementations and some examples with them
+GANs Implementations and their Training (in .ipynb)
 
 Implemented:
 <ul>
@@ -16,6 +16,8 @@ Implemented:
 $ pip install gans-implementations
 ```
 
-## Training of GANs (Notebooks) 
+## Handwritten Digits - MNIST 
 
-COMING SOON
+<ul>
+  <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/GAN%20with%20BCE%20-%20MNIST.ipynb">GAN with BCELoss</a></li>
+</ul>
