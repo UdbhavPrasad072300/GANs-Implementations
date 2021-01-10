@@ -1,6 +1,9 @@
 import torch
 from models.GAN import GAN_Generator, GAN_Discriminator
 from models.DCGAN import  DCGAN_Generator, DCGAN_Discriminator
+from models.SNGAN import WGAN_Discriminator
+
+from Loss_F.loss import W_Crit_Loss
 
 torch.manual_seed(0)
 
@@ -19,11 +22,17 @@ if __name__ == "__main__":
 
     # DCGAN
 
-    g = DCGAN_Generator(10, 1, 256, 4).to(device)
+    g = DCGAN_Generator(10, 1, 64).to(device)
     print(g)
-    d = DCGAN_Discriminator(1, 16, 2).to(device)
+    d = DCGAN_Discriminator(1, 16).to(device)
     print(d)
     del g
     del d
+
+    # WGAN
+
+    g = WGAN_Discriminator(1, 64).to(device)
+    print(g)
+    del g
 
     print("Program has Ended")
