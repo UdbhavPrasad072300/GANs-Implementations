@@ -20,4 +20,9 @@ $ pip install gans-implementations
 
 <ul>
   <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/GAN%20with%20BCE%20-%20MNIST.ipynb">GAN with BCELoss</a></li>
+  <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/DCGAN%20with%20BCE%20-%20MNIST.ipynb">DCGAN with BCELoss</a></li>
 </ul>
+
+## Work Cited
+
+https://www.coursera.org/specializations/generative-adversarial-networks-gans?
