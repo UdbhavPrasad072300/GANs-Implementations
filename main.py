@@ -1,7 +1,8 @@
 import torch
 from models.GAN import GAN_Generator, GAN_Discriminator
 from models.DCGAN import  DCGAN_Generator, DCGAN_Discriminator
-from models.SNGAN import WGAN_Discriminator
+from models.SNGAN import SNGAN_Discriminator
+from models.StyleGAN import StyleGAN_Generator
 
 from Loss_F.loss import W_Crit_Loss
 
@@ -31,8 +32,12 @@ if __name__ == "__main__":
 
     # WGAN
 
-    g = WGAN_Discriminator(1, 64).to(device)
+    g = SNGAN_Discriminator(1, 64).to(device)
     print(g)
     del g
+
+    # StyleGAN
+
+    g = StyleGAN_Generator()
 
     print("Program has Ended")
