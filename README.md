@@ -6,6 +6,8 @@ Implemented:
 <ul>
   <li>Vanilla GAN</li>
   <li>DCGAN - Deep Convolutional GAN</li>
+  <li>WGAN - Wasserstein GAN</li>
+  <li>SNGAN - Spectrally Normalized GAN </li>
 </ul>
 
 ## Installation
@@ -21,6 +23,7 @@ $ pip install gans-implementations
 <ul>
   <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/GAN%20with%20BCE%20-%20MNIST.ipynb">GAN with BCELoss</a></li>
   <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/DCGAN%20with%20BCE%20-%20MNIST.ipynb">DCGAN with BCELoss</a></li>
+  <li><a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/notebooks/SN-WGAN%20with%20GP%20-%20MNIST.ipynb">SN-WGAN with Wasserstein Loss</a></li>
 </ul>
 
 ## Work Cited
