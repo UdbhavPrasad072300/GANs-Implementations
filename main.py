@@ -30,7 +30,7 @@ if __name__ == "__main__":
     del g
     del d
 
-    # WGAN
+    # SNGAN
 
     g = SNGAN_Discriminator(1, 64).to(device)
     print(g)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     g = StyleGAN_Generator(256, 3, 512, 128, 256, 512).to(device)
     print(g)
-    d = StyleGAN_Discriminator().to(device)
+    d = StyleGAN_Discriminator(3, 16).to(device)
     print(d)
     del g
     del d
