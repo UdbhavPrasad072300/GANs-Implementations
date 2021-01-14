@@ -22,15 +22,11 @@ class StyleGAN_Generator(nn.Module):
                                              device=self.device)
         self.block4 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 64, kernel_size,
                                              device=self.device)
-        self.block6 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 128, kernel_size,
-                                             device=self.device)
 
         self.block1_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
         self.block2_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
         self.block3_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
         self.block4_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
-        self.block5_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
-        self.block6_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
 
     def forward(self, z):
         w = self.mapping_network(z)
@@ -40,12 +36,10 @@ class StyleGAN_Generator(nn.Module):
         x_2 = self.block2(x_1, w)
         x_3 = self.block3(x_2, w)
         x_4 = self.block4(x_3, w)
-        x_5 = self.block5(x_4, w)
-        x_6 = self.block6(x_5, w)
 
-        x_6_image = self.block6_to_image(x_7)
+        x_4_image = self.block4_to_image(x_4)
 
-        return x_6_image
+        return x_4_image
 
 
 class StyleGAN_Discriminator(nn.Module):
@@ -56,8 +50,7 @@ class StyleGAN_Discriminator(nn.Module):
             self.get_discriminator_block(in_size, hidden_size),
             self.get_discriminator_block(hidden_size, hidden_size * 2),
             self.get_discriminator_block(hidden_size * 2, hidden_size * 4),
-            self.get_discriminator_block(hidden_size * 4, hidden_size * 8),
-            nn.Conv2d(hidden_size * 8, 1, kernel_size=4, stride=2)
+            nn.Conv2d(hidden_size * 4, 1, kernel_size=4, stride=2)
         )
 
     def forward(self, image):
