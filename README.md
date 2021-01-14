@@ -8,6 +8,7 @@ Implemented:
   <li>DCGAN - Deep Convolutional GAN</li>
   <li>WGAN - Wasserstein GAN</li>
   <li>SNGAN - Spectrally Normalized GAN </li>
+  <li>StyleGAN</li>
 </ul>
 
 ## Installation
