@@ -4,42 +4,38 @@ import torch.nn.functional as F
 
 
 class StyleGAN_Generator(nn.Module):
-    def __init__(self, in_channels, out_channels, hidden_channels, z_dim, mapping_hidden_size, w_dim, kernel_size=3, device="cpu"):
+    def __init__(self, in_channels, out_channels, hidden_channels, z_dim, mapping_hidden_size, w_dim,
+                 synthesis_layers=5, kernel_size=3, device="cpu"):
         super(StyleGAN_Generator, self).__init__()
 
+        self.synthesis_layers = synthesis_layers
         self.device = device
 
         self.x = nn.Parameter(torch.randn(1, in_channels, 4, 4))
         self.mapping_network = MappingNetwork(z_dim, mapping_hidden_size, w_dim)
 
-        self.block0 = SynthesisNetwork_Block(w_dim, in_channels, hidden_channels, 4, kernel_size, use_upsample=False,
-                                             device=self.device)
-        self.block1 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 8, kernel_size,
-                                             device=self.device)
-        self.block2 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 16, kernel_size,
-                                             device=self.device)
-        self.block3 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 32, kernel_size,
-                                             device=self.device)
-        self.block4 = SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 64, kernel_size,
-                                             device=self.device)
+        self.synthesis_network = nn.ModuleList([
+            SynthesisNetwork_Block(w_dim, in_channels, hidden_channels, 4, kernel_size,
+                                   use_upsample=False, device=self.device)
+        ])
+        factor = 2
+        for layer in range(self.synthesis_layers - 1):
+            self.synthesis_network.append(SynthesisNetwork_Block(w_dim, hidden_channels, hidden_channels, 4 * factor,
+                                                                 kernel_size, device=self.device))
+            factor = factor * 2
 
-        self.block1_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
-        self.block2_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
-        self.block3_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
-        self.block4_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
+        self.block_to_image = nn.Conv2d(hidden_channels, out_channels, kernel_size=1)
 
     def forward(self, z):
         w = self.mapping_network(z)
-        x = self.block0(self.x, w)
+        x = self.x
 
-        x_1 = self.block1(x, w)
-        x_2 = self.block2(x_1, w)
-        x_3 = self.block3(x_2, w)
-        x_4 = self.block4(x_3, w)
+        for layer in self.synthesis_network:
+            x = layer(x, w)
 
-        x_4_image = self.block4_to_image(x_4)
+        x_image = self.block_to_image(x)
 
-        return x_4_image
+        return x_image
 
 
 class StyleGAN_Discriminator(nn.Module):
@@ -50,14 +46,14 @@ class StyleGAN_Discriminator(nn.Module):
             self.get_discriminator_block(in_size, hidden_size),
             self.get_discriminator_block(hidden_size, hidden_size * 2),
             self.get_discriminator_block(hidden_size * 2, hidden_size * 4),
-            nn.Conv2d(hidden_size * 4, 1, kernel_size=4, stride=2)
+            nn.Conv2d(hidden_size * 4, 1, kernel_size=3, stride=2)
         )
 
     def forward(self, image):
         preds = self.discriminator(image)
         return preds.view(len(preds), -1)
 
-    def get_discriminator_block(self, in_channels, out_channels, kernel_size=4, stride=2):
+    def get_discriminator_block(self, in_channels, out_channels, kernel_size=3, stride=2):
         block = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride),
             nn.BatchNorm2d(out_channels),
