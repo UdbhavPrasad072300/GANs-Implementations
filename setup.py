@@ -25,6 +25,6 @@ setup(
     url='https://github.com/UdbhavPrasad072300/GANs-Implementations',
     license='MIT',
     classifiers=classifiers,
-    package=find_packages(),
+    packages=find_packages(exclude=['tests']),
     package_dir={'': 'src'},
 )
