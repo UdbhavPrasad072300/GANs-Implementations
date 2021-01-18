@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     # StyleGAN
 
-    g = StyleGAN_Generator(256, 3, 512, 128, 256, 512).to(device)
+    g = StyleGAN_Generator(256, 3, 512, 128, 256, 512, synthesis_layers=8).to(device)
     print(g)
     d = StyleGAN_Discriminator(3, 16).to(device)
     print(d)
