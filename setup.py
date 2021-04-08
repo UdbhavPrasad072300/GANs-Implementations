@@ -16,7 +16,7 @@ classifiers = [
 
 setup(
     name='gans_implementations',
-    version='0.0.1',
+    version='0.0.2',
     description='A bunch of GAN implementations',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,7 +24,7 @@ setup(
     author_email='udbhavprasad072300@gmail.com',
     url='https://github.com/UdbhavPrasad072300/GANs-Implementations',
     license='MIT',
+    py_modules=[""],
     classifiers=classifiers,
-    packages=find_packages(exclude=['tests']),
-    package_dir={'': 'src'},
+    packages=find_packages(),
 )
