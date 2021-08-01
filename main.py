@@ -4,6 +4,7 @@ from models.DCGAN import  DCGAN_Generator, DCGAN_Discriminator
 from models.SNGAN import SNGAN_Discriminator
 from models.StyleGAN import StyleGAN_Generator, StyleGAN_Discriminator
 from models.SRGAN import SRGAN_Generator, SRGAN_Discriminator
+from models.Pix2PixHD import *
 
 from Loss_F.loss import W_Crit_Loss
 
@@ -54,5 +55,7 @@ if __name__ == "__main__":
     print(d)
     del g
     del d
+
+    # Pix2PixHD
 
     print("Program has Ended")
