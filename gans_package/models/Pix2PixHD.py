@@ -18,15 +18,15 @@ class ResidualBlock(nn.Module):
         )
 
     def forward(self, x):
-        return x + self.block
+        return x + self.block(x)
 
 
 class GlobalGenerator(nn.Module):
     def __init__(self, in_channels, channels, out_channels, num_d_block, num_residual_block, num_u_block):
         super(GlobalGenerator, self).__init__()
 
+        # c7s1-64
         self.G1 = [
-            # c7s1-64
             nn.ReflectionPad2d(3),
             nn.Conv2d(in_channels, channels, kernel_size=7),
             nn.InstanceNorm2d(channels),
@@ -49,7 +49,7 @@ class GlobalGenerator(nn.Module):
         # c7s1-3
         self.G1 += [
             nn.ReflectionPad2d(3),
-            nn.Conv2d(in_channels, out_channels, kernel_size=7),
+            nn.Conv2d(channels, out_channels, kernel_size=7),
             nn.InstanceNorm2d(channels),
             nn.ReLU(),
         ]
@@ -62,7 +62,7 @@ class GlobalGenerator(nn.Module):
     def get_D_block(in_channels, out_channels):
 
         d_block = [
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=2),
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=2, padding=1),
             nn.InstanceNorm2d(out_channels),
             nn.ReLU(),
         ]
@@ -73,7 +73,7 @@ class GlobalGenerator(nn.Module):
     def get_U_block(in_channels, out_channels):
 
         u_block = [
-            nn.ConvTranspose2d(in_channels, out_channels, kernel_size=3, stride=2),
+            nn.ConvTranspose2d(in_channels, out_channels, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.InstanceNorm2d(out_channels),
             nn.ReLU(),
         ]

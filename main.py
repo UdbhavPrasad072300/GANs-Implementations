@@ -64,7 +64,11 @@ if __name__ == "__main__":
 
     # Pix2PixHD
     g = GlobalGenerator(3, 64, 3, 4, 9, 4).to(DEVICE)
+    tensor = torch.rand((2, 3, 512, 512)).to(DEVICE)
     print(g)
+    print("Input Size: {}".format(tensor.size()))
+    print("Output Size: {}".format(g(tensor).size()))
     del g
+    del tensor
 
     print("Program has Ended")
