@@ -8,7 +8,13 @@ from models.Pix2PixHD import *
 
 from Loss_F.loss import W_Crit_Loss
 
-torch.manual_seed(0)
+
+SEED = 0
+
+torch.manual_seed(SEED)
+torch.cuda.manual_seed(SEED)
+torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic = True
 
 if __name__ == "__main__":
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -57,5 +63,8 @@ if __name__ == "__main__":
     del d
 
     # Pix2PixHD
+    g = GlobalGenerator(3, 64, 3, 4, 9, 4).to(DEVICE)
+    print(g)
+    del g
 
     print("Program has Ended")
