@@ -8,6 +8,7 @@ Implemented:
   <li>DCGAN - Deep Convolutional GAN</li>
   <li>WGAN - Wasserstein GAN</li>
   <li>SNGAN - Spectrally Normalized GAN </li>
+  <li>SRGAN - Super Resolution GAN </li>
   <li>StyleGAN</li>
 </ul>
 
@@ -28,5 +29,9 @@ $ pip install gans-implementations
 </ul>
 
 ## Work Cited
+
+https://arxiv.org/pdf/1609.04802v5.pdf
+
+https://arxiv.org/pdf/1812.04948.pdf
 
 https://www.coursera.org/specializations/generative-adversarial-networks-gans?
