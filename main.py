@@ -1,10 +1,11 @@
 import torch
-from models.GAN import GAN_Generator, GAN_Discriminator
-from models.DCGAN import  DCGAN_Generator, DCGAN_Discriminator
-from models.SNGAN import SNGAN_Discriminator
-from models.StyleGAN import StyleGAN_Generator, StyleGAN_Discriminator
-from models.SRGAN import SRGAN_Generator, SRGAN_Discriminator
-from models.Pix2PixHD import *
+
+from gans_package.models import GAN_Generator, GAN_Discriminator
+from gans_package.models import  DCGAN_Generator, DCGAN_Discriminator
+from gans_package.models import SNGAN_Discriminator
+from gans_package.models import StyleGAN_Generator, StyleGAN_Discriminator
+from gans_package.models import SRGAN_Generator, SRGAN_Discriminator
+from gans_package.models.Pix2PixHD import *
 
 from Loss_F.loss import W_Crit_Loss
 
