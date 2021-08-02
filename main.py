@@ -65,6 +65,7 @@ if __name__ == "__main__":
     del d
 
     # Pix2PixHD
+
     g = GlobalGenerator(3, 64, 3, 4, 9, 4).to(DEVICE)
     print(g)
     d = Discriminator(3, 64, 1).to(DEVICE)
@@ -75,9 +76,16 @@ if __name__ == "__main__":
     print("Generator Output Size: {}".format(out.size()))
     d_out = d(out)
     print("Discriminator Last Tensor Output Size: {}".format(d_out[-1].size()))
+    del d
+    del d_out
+    d = MultiScaleDiscriminator(3).to(DEVICE)
+    d_out = d(out)
+    print("MutliScale Discriminator Number of Outputs: {}".format(len(d_out)))
+    print("Each Discriminator in MutliScale Discriminator Number of Feature: {}".format(len(d_out[0])))
     del g
     del d
     del tensor
     del out
+    del d_out
 
     print("Program has Ended")

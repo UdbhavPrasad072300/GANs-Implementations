@@ -141,7 +141,7 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         features = []
-        for layer in self.layers():
+        for layer in self.layers:
             x = layer(x)
             features.append(x)
         return features
@@ -153,9 +153,11 @@ class MultiScaleDiscriminator(nn.Module):
 
         self.down_sample_layer = nn.AvgPool2d(3, stride=2, padding=1, count_include_pad=False)
 
-        self.discriminators = nn.ModuleList([Discriminator(3, 64, 1) for _ in n_discriminators])
+        self.discriminators = nn.ModuleList([Discriminator(3, 64, 1) for _ in range(n_discriminators)])
 
     def forward(self, x):
-        for discriminator in self.discriminators:
-            x = discriminator(x)
-        return
+        predictions = [self.discriminators[0](x)]
+        for discriminator in self.discriminators[1:]:
+            x = self.down_sample_layer(x)
+            predictions.append(discriminator(x))
+        return predictions
