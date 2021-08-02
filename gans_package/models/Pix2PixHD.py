@@ -88,29 +88,74 @@ class LocalEnhancer(nn.Module):
     def __init__(self):
         super(LocalEnhancer, self).__init__()
 
+        self.down_sample_layer = nn.AvgPool2d(3, stride=2, padding=1, count_include_pad=False)
+
         self.G1 = GlobalGenerator(3, 64, 3, 4, 9, 4)
 
-        self.G2 = nn.Sequential(
+        self.G2_1 = nn.Sequential(
+            nn.Conv2d(),
+        )
+
+        self.G2_2 = nn.Sequential(
             nn.Conv2d(),
         )
 
     def forward(self, x):
-        x = self.G1(x)
-        x = self.G2(x)
-        return x
+        x_down_sample = self.down_sample_layer(x)
+        x_G1 = self.G1(x_down_sample)
+        x_G2_1 = self.G2_1(x)
+        return self.G2_2(x_G2_1 + x_G1)
 
 
 class Discriminator(nn.Module):
-    def __init__(self):
+    def __init__(self, in_channels, channels, out_channels):
         super(Discriminator, self).__init__()
 
-    def forward(self):
-        return
+        self.layers = nn.ModuleList([
+            nn.Sequential(
+                # C64
+                nn.Conv2d(in_channels, channels, kernel_size=4, stride=2),
+                nn.InstanceNorm2d(channels),
+                nn.LeakyReLU(0.2),
+            ),
+            nn.Sequential(
+                # C128
+                nn.Conv2d(channels, channels * 2, kernel_size=4, stride=2),
+                nn.InstanceNorm2d(channels * 2),
+                nn.LeakyReLU(0.2),
+            ),
+            nn.Sequential(
+                # C256
+                nn.Conv2d(channels * 2, channels * 4, kernel_size=4, stride=2),
+                nn.InstanceNorm2d(channels * 4),
+                nn.LeakyReLU(0.2),
+            ),
+            nn.Sequential(
+                # C512
+                nn.Conv2d(channels * 4, channels * 8, kernel_size=4, stride=2),
+                nn.InstanceNorm2d(channels * 8),
+                nn.LeakyReLU(0.2),
+                nn.Conv2d(channels * 8, out_channels, kernel_size=4)
+            ),
+        ])
+
+    def forward(self, x):
+        features = []
+        for layer in self.layers():
+            x = layer(x)
+            features.append(x)
+        return features
 
 
-class MultiscaleDiscriminator(nn.Module):
-    def __init__(self):
-        super(MultiscaleDiscriminator, self).__init__()
+class MultiScaleDiscriminator(nn.Module):
+    def __init__(self, n_discriminators):
+        super(MultiScaleDiscriminator, self).__init__()
 
-    def forward(self):
+        self.down_sample_layer = nn.AvgPool2d(3, stride=2, padding=1, count_include_pad=False)
+
+        self.discriminators = nn.ModuleList([Discriminator(3, 64, 3) for _ in n_discriminators])
+
+    def forward(self, x):
+        for discriminator in self.discriminators:
+            x = discriminator(x)
         return

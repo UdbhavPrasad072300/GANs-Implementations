@@ -17,6 +17,7 @@ torch.cuda.manual_seed(SEED)
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
 
+
 if __name__ == "__main__":
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Device being used: {}".format(DEVICE))
@@ -65,11 +66,18 @@ if __name__ == "__main__":
 
     # Pix2PixHD
     g = GlobalGenerator(3, 64, 3, 4, 9, 4).to(DEVICE)
-    tensor = torch.rand((2, 3, 512, 512)).to(DEVICE)
     print(g)
-    print("Input Size: {}".format(tensor.size()))
-    print("Output Size: {}".format(g(tensor).size()))
+    d = Discriminator(3, 64, 3).to(DEVICE)
+    print(d)
+    tensor = torch.rand((2, 3, 512, 512)).to(DEVICE)
+    print("Generator Input Size: {}".format(tensor.size()))
+    out = g(tensor)
+    print("Generator Output Size: {}".format(out.size()))
+    d_out = d(out)
+    print("Discriminator Last Tensor Output Size: {}".format(d_out[-1].size()))
     del g
+    del d
     del tensor
+    del out
 
     print("Program has Ended")
