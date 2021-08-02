@@ -115,7 +115,7 @@ class Discriminator(nn.Module):
             nn.Sequential(
                 # C64
                 nn.Conv2d(in_channels, channels, kernel_size=4, stride=2),
-                nn.InstanceNorm2d(channels),
+                # nn.InstanceNorm2d(channels),
                 nn.LeakyReLU(0.2),
             ),
             nn.Sequential(
@@ -153,7 +153,7 @@ class MultiScaleDiscriminator(nn.Module):
 
         self.down_sample_layer = nn.AvgPool2d(3, stride=2, padding=1, count_include_pad=False)
 
-        self.discriminators = nn.ModuleList([Discriminator(3, 64, 3) for _ in n_discriminators])
+        self.discriminators = nn.ModuleList([Discriminator(3, 64, 1) for _ in n_discriminators])
 
     def forward(self, x):
         for discriminator in self.discriminators:
