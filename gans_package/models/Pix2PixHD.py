@@ -35,7 +35,7 @@ class GlobalGenerator(nn.Module):
 
         # d128, d256, d512, d1024
         for _ in range(num_d_block):
-            self.G1 += self.get_D_block(channels, channels*2)
+            self.G1 += self.get_D_block(channels, channels * 2)
             channels *= 2
 
         # R1024, R1024, R1024, R1024, R1024, R1024, R1024, R1024, R1024
@@ -46,17 +46,14 @@ class GlobalGenerator(nn.Module):
             self.G1 += self.get_U_block(channels, channels // 2)
             channels //= 2
 
-        # c7s1-3
-        self.G1 += [
-            nn.ReflectionPad2d(3),
-            nn.Conv2d(channels, out_channels, kernel_size=7),
-            nn.InstanceNorm2d(channels),
-            nn.ReLU(),
-        ]
-
         self.G1 = nn.Sequential(*self.G1)
 
-        self.final = nn.Sequential()
+        # c7s1-3, removed when combined with Local Enhancer
+        self.final = nn.Sequential(
+            nn.ReflectionPad2d(3),
+            nn.Conv2d(channels, out_channels, kernel_size=7),
+            nn.Tanh(),
+        )
 
     @staticmethod
     def get_D_block(in_channels, out_channels):
@@ -81,29 +78,55 @@ class GlobalGenerator(nn.Module):
         return u_block
 
     def forward(self, x):
-        return self.final(self.G1(x))
+        x = self.G1(x)
+        # print(x.size())
+        return self.final(x)
 
 
 class LocalEnhancer(nn.Module):
-    def __init__(self):
+    def __init__(self, in_channels, channels, out_channels, n_residual=3):
         super(LocalEnhancer, self).__init__()
 
         self.down_sample_layer = nn.AvgPool2d(3, stride=2, padding=1, count_include_pad=False)
 
         self.G1 = GlobalGenerator(3, 64, 3, 4, 9, 4)
 
+        # c7s1-32, d64, u64
         self.G2_1 = nn.Sequential(
-            nn.Conv2d(),
+            nn.ReflectionPad2d(3),
+            nn.Conv2d(in_channels, channels, kernel_size=7),
+            nn.InstanceNorm2d(channels),
+            nn.ReLU(),
+
+            nn.Conv2d(channels, channels * 2, kernel_size=3, stride=2, padding=1),
+            nn.InstanceNorm2d(channels * 2),
+            nn.ReLU(),
+
+            # nn.ConvTranspose2d(channels * 2, channels * 2, kernel_size=3, stride=2, padding=1, output_padding=1),
+            # nn.InstanceNorm2d(channels * 2),
+            # nn.ReLU(),
         )
 
+        # R64, R64, R64, u32, c7s1-3
         self.G2_2 = nn.Sequential(
-            nn.Conv2d(),
+            *[ResidualBlock(channels * 2) for _ in range(n_residual)],
+
+            nn.ConvTranspose2d(channels * 2, channels, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.InstanceNorm2d(channels),
+            nn.ReLU(),
+
+            nn.ReflectionPad2d(3),
+            nn.Conv2d(channels, out_channels, kernel_size=7),
+            nn.Tanh(),
         )
 
     def forward(self, x):
         x_down_sample = self.down_sample_layer(x)
+        print(x_down_sample.size())
         x_G1 = self.G1(x_down_sample)
+        print(x_G1.size())
         x_G2_1 = self.G2_1(x)
+        print(x_G2_1.size())
         return self.G2_2(x_G2_1 + x_G1)
 
 
