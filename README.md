@@ -1,5 +1,20 @@
 # GANs-Implementations
 
+<p>
+  <a href="https://github.com/UdbhavPrasad072300/GANs-Implementations/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/UdbhavPrasad072300/GANs-Implementations">
+  </a>
+  <a href="https://pypi.org/project/GANs-Implementations/">
+        <img alt="PyPi Version" src="https://img.shields.io/pypi/v/GANs-Implementations">
+  </a>
+  <a href="https://pypi.org/project/GANs-Implementations/">
+        <img alt="PyPi Downloads" src="https://img.shields.io/pypi/dm/GANs-Implementations">
+  </a>
+  <a href="https://pypi.org/project/GANs-Implementations/">
+        <img alt="Package Status" src="https://img.shields.io/pypi/status/GANs-Implementations">
+  </a>
+</p>
+
 GANs Implementations and their Training (in .ipynb)
 
 Implemented:
@@ -18,6 +33,13 @@ Implemented:
 
 ```bash
 $ pip install gans-implementations
+```
+
+Local Install and Run: 
+
+```bash
+$ python setup.py sdist bdist_wheel
+$ pip install -e .
 ```
 
 ## Handwritten Digits - MNIST 
