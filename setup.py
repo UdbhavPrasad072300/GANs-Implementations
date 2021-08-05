@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Science/Research',
     'Operating System :: OS Independent',
     'License :: OSI Approved :: MIT License',
@@ -16,7 +16,7 @@ classifiers = [
 
 setup(
     name='gans_implementations',
-    version='0.0.2',
+    version='0.1.0',
     description='A bunch of GAN implementations',
     long_description=long_description,
     long_description_content_type='text/markdown',
