@@ -94,6 +94,8 @@ pred = d(fake)
 
 ## Work Cited
 
+https://arxiv.org/pdf/1711.11585.pdf
+
 https://arxiv.org/pdf/1609.04802v5.pdf
 
 https://arxiv.org/pdf/1812.04948.pdf
