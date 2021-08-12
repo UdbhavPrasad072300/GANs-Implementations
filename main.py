@@ -7,6 +7,8 @@ from gans_package.models import StyleGAN_Generator, StyleGAN_Discriminator
 from gans_package.models import SRGAN_Generator, SRGAN_Discriminator
 from gans_package.models.Pix2PixHD import *
 
+from gans_package.dataloader import CityScapeDataset
+
 from Loss_F.loss import W_Crit_Loss
 
 
@@ -106,5 +108,10 @@ if __name__ == "__main__":
     del out
     del d_out
     del local_enhancer_out
+
+    # Datasets
+
+    dataset = CityScapeDataset()
+    print(dataset[0])
 
     print("Program has Ended")
