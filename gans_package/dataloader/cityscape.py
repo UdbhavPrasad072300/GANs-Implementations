@@ -60,4 +60,4 @@ class CityScapeDataset(Dataset):
 
 
 def getCityScapeDataLoader(data_path, batch_size=2, shuffle=True):
-    return DataLoader(CityScapeDataset(data_path), batch_size=batch_size, shuffle=True)
+    return DataLoader(CityScapeDataset(data_path), batch_size=batch_size, shuffle=shuffle)
