@@ -56,4 +56,8 @@ class CityScapeDataset(Dataset):
         return image, (labels, instances)
 
     def __len__(self):
-        return
+        return len(self.data)
+
+
+def getCityScapeDataLoader(data_path, batch_size=2, shuffle=True):
+    return DataLoader(CityScapeDataset(data_path), batch_size=batch_size, shuffle=True)

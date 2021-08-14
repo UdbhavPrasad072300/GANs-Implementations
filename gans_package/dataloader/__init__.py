@@ -1,1 +1,1 @@
-from gans_package.dataloader.cityscape import CityScapeDataset
+from gans_package.dataloader.cityscape import CityScapeDataset, getCityScapeDataLoader
