@@ -2,6 +2,18 @@ import torch
 import torch.nn as nn
 
 
+def Pix2PixHD_Train(generator, discriminator, encoder, g_optimizer, d_optimizer, dataloader, NUM_EPOCHS, device="cpu"):
+    encoder.to(device).train
+    generator.to(device).train
+    discriminator.to(device).train
+
+    for epoch in range(NUM_EPOCHS):
+        for batch_idx, () in enumerate():
+            pass
+
+    return
+
+
 def Wasserstein_Crit_Train(critic, generator, critic_optimizer, critic_loss, critic_repeats, real, latent_size,
                            device="cpu"):
     b = real.size(0)
