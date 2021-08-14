@@ -8,8 +8,12 @@ def Pix2PixHD_Train(generator, discriminator, encoder, g_optimizer, d_optimizer,
     discriminator.to(device).train
 
     for epoch in range(NUM_EPOCHS):
-        for batch_idx, () in enumerate():
-            pass
+        for batch_idx, (image, (labels, instances)) in enumerate():
+            print(image.size())
+            print(labels.size())
+            print(instances.size())
+
+            break
 
     return
 
