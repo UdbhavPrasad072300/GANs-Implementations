@@ -102,6 +102,12 @@ if __name__ == "__main__":
     print("MutliScale Discriminator Number of Outputs: {}".format(len(d_out)))
     print("Each Discriminator in MutliScale Discriminator Number of Feature: {}".format(len(d_out[0])))
 
+    encoder_in = torch.rand((2, 3, 1024, 1024)).to(DEVICE)
+    encoder = Encoder(3, 8, 3).to(DEVICE)
+    print(encoder)
+    encoder_out = encoder(encoder_in)
+    print("Encoder Output Size: {}".format(encoder_out.size()))
+
     del g
     del d
     del tensor

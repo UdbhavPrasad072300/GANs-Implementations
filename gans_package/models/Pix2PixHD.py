@@ -130,6 +130,48 @@ class LocalEnhancer(nn.Module):
         return self.G2_2(x_G2_1 + x_G1)
 
 
+class Encoder(nn.Module):
+    def __init__(self, in_channels, channels, out_channels):
+        super(Encoder, self).__init__()
+
+        self.encoder_decoder = nn.Sequential(
+            nn.ReflectionPad2d(3),
+            nn.Conv2d(in_channels, channels, kernel_size=7),
+            nn.InstanceNorm2d(channels),
+            nn.ReLU(),
+
+            # encoder
+            nn.Conv2d(channels, channels * 2, kernel_size=3, stride=2, padding=1),
+            nn.InstanceNorm2d(channels * 2),
+            nn.ReLU(),
+            nn.Conv2d(channels * 2, channels * 4, kernel_size=3, stride=2, padding=1),
+            nn.InstanceNorm2d(channels * 4),
+            nn.ReLU(),
+            nn.Conv2d(channels * 4, channels * 8, kernel_size=3, stride=2, padding=1),
+            nn.InstanceNorm2d(channels * 8),
+            nn.ReLU(),
+
+            # decoder
+            nn.ConvTranspose2d(channels * 8, channels * 4, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.InstanceNorm2d(channels * 4),
+            nn.ReLU(),
+            nn.ConvTranspose2d(channels * 4, channels * 2, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.InstanceNorm2d(channels * 2),
+            nn.ReLU(),
+            nn.ConvTranspose2d(channels * 2, channels, kernel_size=3, stride=2, padding=1, output_padding=1),
+            nn.InstanceNorm2d(channels),
+            nn.ReLU(),
+
+            nn.ReflectionPad2d(3),
+            nn.Conv2d(channels, out_channels, kernel_size=7),
+            nn.Tanh(),
+        )
+
+    def forward(self, x):
+        x = self.encoder_decoder(x)
+        return x
+
+
 class Discriminator(nn.Module):
     def __init__(self, in_channels, channels, out_channels):
         super(Discriminator, self).__init__()
